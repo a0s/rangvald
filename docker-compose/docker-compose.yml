@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  web:
+    image: django-todo
+    build:
+      context: ../django-todo
+      dockerfile: Dockerfile
+    environment:
+      DB_NAME: django-todo
+      DB_USER: django-todo
+      DB_PASSWORD: django-todo
+      DB_HOST: postgres
+      DB_PORT: 5432
+    ports:
+      - 8000:8000
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    command: >
+      bash -c "./wait-for-it.sh postgres:5432 -- python manage.py migrate
+      && ./wait-for-it.sh postgres:5432 -- python manage.py runserver 0.0.0.0:8000"
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_PASSWORD: django-todo
+      POSTGRES_USER: django-todo
+      POSTGRES_DB: django-todo
+    volumes:
+      - "django-todo-postgres:/var/lib/postgresql/data"
+volumes:
+  django-todo-postgres: {}
+
