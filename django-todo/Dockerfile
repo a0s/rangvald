@@ -14,6 +14,7 @@ RUN \
 COPY local.py /app/project
 COPY wait-for-it.sh /app/
 
-# TODO another user
+# TODO: Add non root user
 
-#ENTRYPOINT ["python", "manage.py"]
+#CMD ["python", "manage.py", "migrate"]
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

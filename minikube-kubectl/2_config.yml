@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: django-todo
+data:
+  db_name: django-todo
+  db_user: django-todo
+  db_password: 4f3784gqoyful
