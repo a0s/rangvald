@@ -4,7 +4,7 @@ metadata:
   name: web
   namespace: django-todo
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: web
@@ -84,8 +84,7 @@ metadata:
 spec:
   selector:
     app: web
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - name: http
-      port: 8000
-      nodePort: 32222
+    - port: 8080
+      targetPort: 8000
