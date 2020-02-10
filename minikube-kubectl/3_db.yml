@@ -1,8 +1,8 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: django-todo
-  namespace: django-todo
+  name: pv
+  namespace: rangvald
 spec:
   storageClassName: manual
   capacity:
@@ -10,26 +10,30 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /data/django-todo
+    path: /data/rangvald
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgres
-  namespace: django-todo
+  name: db-pvc
+  namespace: rangvald
+  labels:
+    app: postgres
 spec:
   storageClassName: manual
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 5G
+      storage: 3G
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
-  namespace: django-todo
+  name: db
+  namespace: rangvald
+  labels:
+    app: postgres
 spec:
   replicas: 1
   selector:
@@ -42,7 +46,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:12-alpine
+          image: postgres:12.1-alpine
           ports:
             - name: postgres
               containerPort: 5432
@@ -74,13 +78,15 @@ spec:
       volumes:
         - name: postgredb
           persistentVolumeClaim:
-            claimName: postgres
+            claimName: db-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
-  namespace: django-todo
+  name: db
+  namespace: rangvald
+  labels:
+    app: postgres
 spec:
   selector:
     app: postgres

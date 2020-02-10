@@ -2,8 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config
-  namespace: django-todo
+  namespace: rangvald
 data:
-  db_name: django-todo
-  db_user: django-todo
-  db_password: 4f3784gqoyful
+  db_name: somedb
+  db_user: someusername
+  db_password: somepassword

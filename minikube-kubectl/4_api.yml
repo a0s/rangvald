@@ -1,17 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
-  namespace: django-todo
+  name: api
+  namespace: rangvald
+  labels:
+    app: django-todo
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: web
+      app: api
   template:
     metadata:
       labels:
-        app: web
+        app: api
     spec:
       initContainers:
         - name: migrator
@@ -34,7 +36,7 @@ spec:
                   name: config
                   key: db_password
             - name: DB_HOST
-              value: postgres
+              value: db
             - name: DB_PORT
               value: "5432"
           command: ["python"]
@@ -60,7 +62,7 @@ spec:
                   name: config
                   key: db_password
             - name: DB_HOST
-              value: postgres
+              value: db
             - name: DB_PORT
               value: "5432"
           command: ["python"]
@@ -79,11 +81,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: web
-  namespace: django-todo
+  name: api
+  namespace: rangvald
+  labels:
+    app: django-todo
 spec:
   selector:
-    app: web
+    app: api
   type: LoadBalancer
   ports:
     - port: 8080
