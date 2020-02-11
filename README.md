@@ -2,7 +2,7 @@
 
 > Dockerize and deploy sample Django app to Minikube.
 
-![render1581382393226](/uploads/9132e9eeaa7c44509599abd804aba757/render1581382393226.gif)
+![render1581383338179](/uploads/9855afafccc3ac17c5541a8c464af78f/render1581383338179.gif)
 
 ```shell script
 > git clone https://gitlab.com/a0s/rangvald
@@ -45,7 +45,7 @@ It will deploy 1 pod for DB and 3 pods for API in namespace `rangvald`.
 Most of the variables were hardcoded. 
 Db settings are passing through ConfigMap (it should be Secret on production).  
 
-## 2.2 Deploy with terraform
+## 2.2 Deploy with Terraform
 
 This is almost the same as kubectl, ConfigMap was skipped, many variables were added.
 
