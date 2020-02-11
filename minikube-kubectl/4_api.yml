@@ -6,7 +6,7 @@ metadata:
   labels:
     app: django-todo
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: api

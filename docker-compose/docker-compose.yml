@@ -21,7 +21,7 @@ services:
       bash -c "./wait-for-it.sh postgres:5432 -- python manage.py migrate
       && ./wait-for-it.sh postgres:5432 -- python manage.py runserver 0.0.0.0:8000"
   postgres:
-    image: postgres:12-alpine
+    image: postgres:12.1-alpine
     environment:
       POSTGRES_PASSWORD: django-todo
       POSTGRES_USER: django-todo
