@@ -16,11 +16,22 @@ Naming:
 
 # 1. Build image
 
+Alpine-based image:
+
+```shell script
+> ./api-image/build-alpine.sh
+
+REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
+django-todo                      latest              4ba28edef3c4        3 minutes ago       222MB
+```
+
+Buster-based image:
+
 ```shell script
 > ./api-image/build.sh
 
-> docker images | grep django-todo
-django-todo                          latest              7cd11a794763        2 days ago          1.24GB
+REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
+django-todo                      latest              e2884eb3eee6        3 seconds ago       1.24GB
 ```
 
 # 2. Deploy to minikube

@@ -3,8 +3,8 @@ services:
   web:
     image: django-todo
     build:
-      context: ../django-todo
-      dockerfile: Dockerfile
+      context: ../api-image
+      dockerfile: Dockerfile-alpine
     environment:
       DB_NAME: django-todo
       DB_USER: django-todo
@@ -18,7 +18,7 @@ services:
     depends_on:
       - postgres
     command: >
-      bash -c "./wait-for-it.sh postgres:5432 -- python manage.py migrate
+      /bin/bash -c "./wait-for-it.sh postgres:5432 -- python manage.py migrate
       && ./wait-for-it.sh postgres:5432 -- python manage.py runserver 0.0.0.0:8000"
   postgres:
     image: postgres:12.1-alpine
