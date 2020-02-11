@@ -1,4 +1,8 @@
-Dockerize and deploy sample Django app to Minikube.
+# Rangvald
+
+> Dockerize and deploy sample Django app to Minikube.
+
+![render1581382393226](/uploads/9132e9eeaa7c44509599abd804aba757/render1581382393226.gif)
 
 ```shell script
 > git clone https://gitlab.com/a0s/rangvald
