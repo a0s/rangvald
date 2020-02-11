@@ -1,20 +1,26 @@
-FROM python:3.7.6-buster
+FROM python:3.7.6-alpine
 
-ARG DEBIAN_FRONTEND=noninteractive
-
+ARG PUID=65535
+ARG PGID=65535
 WORKDIR /app
+COPY local.py wait-for-it.sh /tmp/
 
 RUN \
-  apt-get update -qqy && \
-  apt-get -qqy install pipenv git && \
-  rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
+  apk update && \
+  apk upgrade && \
+  apk add --no-cache bash libpq && \
+  apk add --no-cache --virtual build-dependencies build-base gcc git postgresql-dev && \
   git clone https://github.com/shacker/gtd.git /app && \
-  pipenv install --system --deploy --dev
+  pip install pipenv && \
+  pipenv install --system --deploy --dev && \
+  apk del build-dependencies && \
+  addgroup -g ${PGID} django && \
+  adduser -H -D -u ${PUID} -G django django && \
+  cp /tmp/local.py /app/project && \
+  cp /tmp/wait-for-it.sh /app && \
+  chown -R django:django /app
 
-COPY local.py /app/project
-COPY wait-for-it.sh /app/
-
-# TODO: Add non root user
+USER django
 
 #CMD ["python", "manage.py", "migrate"]
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -4,7 +4,7 @@ services:
     image: django-todo
     build:
       context: ../api-image
-      dockerfile: Dockerfile-alpine
+      dockerfile: Dockerfile
     environment:
       DB_NAME: django-todo
       DB_USER: django-todo

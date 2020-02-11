@@ -14,27 +14,26 @@ Naming:
     API - Sample Django app from https://github.com/shacker/gtd.git
     DB - Postgres 12.1
 
-# 1. Build image
+# Build image
 
-Alpine-based image:
-
-```shell script
-> ./api-image/build-alpine.sh
-
-REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
-django-todo                      latest              4ba28edef3c4        3 minutes ago       222MB
-```
-
-Buster-based image:
+Alpine-based image
 
 ```shell script
 > ./api-image/build.sh
 
 REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
-django-todo                      latest              e2884eb3eee6        3 seconds ago       1.24GB
+django-todo                      latest              4ba28edef3c4        3 minutes ago       222MB
 ```
 
-# 2. Deploy to minikube
+## Test image with docker-compose
+
+```shell script
+> ./docker-compose/run.sh
+```
+
+http://localhost:8000
+
+# Deploy to minikube
 
 Don't forget to switch context to your local Docker on Mac
 
@@ -45,7 +44,7 @@ CURRENT   NAME                 CLUSTER          AUTHINFO                NAMESPAC
           docker-for-desktop   docker-desktop   docker-desktop
 ```
 
-## 2.1 Deploy with kubectl
+## Kubectl
 
 ```shell script
 > kubectl apply -f ./minikube-kubectl
@@ -56,7 +55,7 @@ It will deploy 1 pod for DB and 3 pods for API in namespace `rangvald`.
 Most of the variables were hardcoded. 
 Db settings are passing through ConfigMap (it should be Secret on production).  
 
-## 2.2 Deploy with Terraform
+## Terraform
 
 This is almost the same as kubectl, ConfigMap was skipped, many variables were added.
 
