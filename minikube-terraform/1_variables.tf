@@ -63,7 +63,7 @@ variable "api_failure_threshold" {
 }
 
 variable "api_period_seconds" {
-  default = 5
+  default = 3
 }
 
 variable "api_external_port" {

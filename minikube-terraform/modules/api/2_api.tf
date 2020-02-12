@@ -4,12 +4,12 @@ resource "kubernetes_deployment" "api" {
     namespace = var.namespace
 
     labels = {
-      app = "django-todo"
+      app = var.name
     }
   }
 
   spec {
-    replicas = var.api_pods_count
+    replicas = var.replicas
 
     selector {
       match_labels = {
@@ -26,8 +26,8 @@ resource "kubernetes_deployment" "api" {
       spec {
         init_container {
           name = "migrator"
-          image = var.api_image
-          image_pull_policy = "Never"
+          image = var.image
+          image_pull_policy = var.image_pull_policy
 
           env {
             name = "DB_NAME"
@@ -46,12 +46,12 @@ resource "kubernetes_deployment" "api" {
 
           env {
             name = "DB_HOST"
-            value = kubernetes_service.db-svc.metadata[0].name
+            value = var.db_host
           }
 
           env {
             name = "DB_PORT"
-            value = kubernetes_service.db-svc.spec[0].port[0].port
+            value = var.db_port
           }
 
           command = [
@@ -63,9 +63,9 @@ resource "kubernetes_deployment" "api" {
         }
 
         container {
-          name = "app"
-          image = var.api_image
-          image_pull_policy = "Never"
+          name = "main"
+          image = var.image
+          image_pull_policy = var.image_pull_policy
 
           env {
             name = "DB_NAME"
@@ -84,12 +84,12 @@ resource "kubernetes_deployment" "api" {
 
           env {
             name = "DB_HOST"
-            value = kubernetes_service.db-svc.metadata[0].name
+            value = var.db_host
           }
 
           env {
             name = "DB_PORT"
-            value = kubernetes_service.db-svc.spec[0].port[0].port
+            value = var.db_port
           }
 
           command = [
@@ -111,36 +111,12 @@ resource "kubernetes_deployment" "api" {
               port = "8000"
             }
 
-            initial_delay_seconds = var.api_initial_delay_seconds
-            failure_threshold = var.api_failure_threshold
-            period_seconds = var.api_period_seconds
+            initial_delay_seconds = var.initial_delay_seconds
+            failure_threshold = var.failure_threshold
+            period_seconds = var.period_seconds
           }
         }
       }
-    }
-  }
-}
-
-resource "kubernetes_service" "api-svc" {
-  metadata {
-    name = "api"
-    namespace = var.namespace
-
-    labels = {
-      app = "django-todo"
-    }
-  }
-
-  spec {
-    selector = {
-      app = "api"
-    }
-
-    type = "LoadBalancer"
-
-    port {
-      port = var.api_external_port
-      target_port = 8000
     }
   }
 }
