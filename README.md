@@ -2,6 +2,11 @@
 
 > Dockerize and deploy sample Django app to Minikube.
 
+Options:
+ - raw yaml files for kubectl
+ - Terraform-based deployment
+ - Helm3-based deployment
+
 ```shell script
 > git clone https://github.com/a0s/rangvald
 > cd rangvald
