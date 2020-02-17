@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "minikube-helm.fullname" . }}-db-pv
+  labels:
+    {{- include "minikube-helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  storageClassName: manual
+  capacity:
+    storage: {{ .Values.db.storageCapacity }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.db.storageHostFolder }}/{{ include "minikube-helm.fullname" . }}

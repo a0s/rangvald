@@ -1,0 +1,1 @@
+Visit http://127.0.0.1:{{ .Values.api.service.port }} to use your application

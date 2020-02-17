@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "minikube-helm.fullname" . }}-db-deployment
+  labels:
+    {{- include "minikube-helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "minikube-helm.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: database
+  template:
+    metadata:
+      labels:
+        {{- include "minikube-helm.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: database
+    spec:
+      containers:
+        - name: main
+          image: {{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}
+          imagePullPolicy: {{ .Values.db.image.pullPolicy }}
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              {{- include "minikube-helm.env.db-name" . | nindent 14 }}
+            - name: POSTGRES_USER
+              {{- include "minikube-helm.env.db-user" . | nindent 14 }}
+            - name: POSTGRES_PASSWORD
+              {{- include "minikube-helm.env.db-password" . | nindent 14 }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: datavolume
+          readinessProbe:
+            tcpSocket:
+              port: postgres
+            initialDelaySeconds: {{ .Values.db.initialDelaySeconds }}
+            failureThreshold: {{ .Values.db.failureThreshold }}
+            periodSeconds: {{ .Values.db.periodSeconds }}
+          resources:
+            {{- toYaml .Values.db.resources | nindent 12 }}
+      volumes:
+        - name: datavolume
+          persistentVolumeClaim:
+            claimName: {{ include "minikube-helm.fullname" . }}-db-pvc

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "minikube-helm.fullname" . }}-db-pvc
+  labels:
+    {{- include "minikube-helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.db.storageCapacity }}
