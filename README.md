@@ -2,10 +2,8 @@
 
 > Dockerize and deploy sample Django app to Minikube.
 
-![render1581383338179](/uploads/9855afafccc3ac17c5541a8c464af78f/render1581383338179.gif)
-
 ```shell script
-> git clone https://gitlab.com/a0s/rangvald
+> git clone https://github.com/a0s/rangvald
 > cd rangvald
 ``` 
 
@@ -123,14 +121,32 @@ There are many variables that can be changed with Terraform's `TF_VAR_` variable
 | api_period_seconds        | 5                                       | readinessProbe.periodSeconds for API                     |
 | api_external_port         | 8080                                    | Localhost's port to open site                            |
 
-# TODO
+## Helm
 
-## What about security?
+Prerequisites:
 
-How to pass secrets into pod? We have several options here:
+```shell script
+> helm version                                                                                         ruby-2.6.3
+version.BuildInfo{Version:"v3.0.3", GitCommit:"ac925eb7279f4a6955df663a0128044a8a6b7593", GitTreeState:"clean", GoVersion:"go1.13.7"}
+```
 
-* Environments (ConfigMap, Secret)
+Deploying without secrets:
 
-* Files on mounted volume: Secret, vault-k8s     
+```
+> helm install rangvald minikube-helm --set db.config.dbPassword=not_secret_password
+```
 
-* Fetching secrets from remote storage on the fly: Consul, Consul+Vault
+Deploying with secrets:
+
+```
+# Create secret in kube
+> kubectl create secret generic db-config \
+    --from-literal=db_name=secret_db \
+    --from-literal=db_user=secret_user \
+    --from-literal=db_password=1111
+
+# Use secret during deploy
+> helm install rangvald minikube-helm --set db.config.type=secret
+```
+
+There are many config options prepared for this helm chart in [values.yaml](minikube-helm/values.yaml)
